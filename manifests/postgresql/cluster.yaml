@@ -1,3 +1,4 @@
+---
 # Requires the CloudNativePG operator and an externally managed Secret named
 # postgres-app-credentials with username and password keys.
 apiVersion: postgresql.cnpg.io/v1
