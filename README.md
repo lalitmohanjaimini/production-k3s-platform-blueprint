@@ -18,6 +18,7 @@ The repository documents decisions and validation steps—not a universal copy-p
 - **Stateful systems deserve lifecycle-aware tooling** — use operators where they reduce operational risk
 - **Internal by default** — data and messaging services stay private unless exposure is justified
 - **Observable operations** — metrics, logs and alerts are part of the platform
+- **Layered security** — admission guardrails and runtime detection solve different problems
 - **Recoverability over assumptions** — backup and restore procedures must be tested
 - **No secrets in Git** — credentials come from an external secret workflow
 
@@ -29,11 +30,13 @@ flowchart TB
     E --> M[MetalLB service address]
     M --> T[Traefik ingress]
     T --> A[Application workloads]
+    K[Kyverno admission] --> A
     A --> P[(PostgreSQL)]
     A --> G[(MongoDB)]
     A --> R[(Redis)]
     A --> Q[RabbitMQ]
     A --> O[Prometheus and Loki]
+    F[Falco runtime detection] --> O
     P --> O
     G --> O
     R --> O
@@ -55,7 +58,9 @@ flowchart TB
 | Metrics | Prometheus Operator and Alertmanager | Collection, recording, alerts and notification routing |
 | Logs | Loki HA monolithic and Grafana Alloy | Durable log storage, collection and querying |
 | Visualization | Grafana | Dashboards and operational investigation |
-| Runtime security | Falco and Kubernetes policies | Workload visibility and guardrails |
+| Admission policy | Kyverno | Audit-first workload configuration guardrails |
+| Runtime security | Falco Operator | Kernel-level runtime detection across Linux nodes |
+| Security access | Kubernetes RBAC | Read-only investigation without Secret access |
 
 ## Repository contents
 
@@ -66,6 +71,7 @@ flowchart TB
 │   ├── data-and-messaging.md
 │   ├── observability.md
 │   ├── operations.md
+│   ├── runtime-security.md
 │   └── security.md
 ├── manifests/
 │   ├── metallb/
@@ -75,6 +81,7 @@ flowchart TB
 │   ├── postgresql/
 │   ├── rabbitmq/
 │   ├── redis/
+│   ├── security/
 │   └── traefik/
 ├── scripts/
 │   └── validate.sh
@@ -85,7 +92,8 @@ flowchart TB
 ## Quick start
 
 1. Read [Architecture](docs/architecture.md), [Data and messaging](docs/data-and-messaging.md),
-   [Observability](docs/observability.md), [Security](docs/security.md) and [Operations](docs/operations.md).
+   [Observability](docs/observability.md), [Runtime security](docs/runtime-security.md),
+   [Security](docs/security.md) and [Operations](docs/operations.md).
 2. Replace every `REPLACE_ME` value and documentation-only address.
 3. Confirm storage classes, failure domains, DNS, TLS, chart versions, image digests and backup destinations.
 4. Validate locally:
@@ -104,7 +112,9 @@ The address range `192.0.2.0/24` used here is reserved for documentation and mus
 
 ## Status
 
-**Current release — v0.3.0 (Observability):** the v0.2 data and messaging platform plus Prometheus, Grafana, Alertmanager, Loki, Grafana Alloy, platform alerts and metrics discovery.
+- **Latest release — v0.3.0:** observability milestone
+- **Current development — v0.4 runtime security:** Falco Operator, Kyverno HA, audit-first policies,
+  isolated security namespaces and least-privilege audit RBAC
 
 ## Author
 
