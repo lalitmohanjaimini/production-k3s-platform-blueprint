@@ -18,9 +18,9 @@ else
   fi
 fi
 
-echo "Checking YAML syntax when yamllint is available..."
+echo "Checking YAML syntax and style when yamllint is available..."
 if command -v yamllint >/dev/null 2>&1; then
-  yamllint manifests
+  yamllint .yamllint.yml .github/workflows manifests
 else
   echo "yamllint not installed; syntax lint skipped."
 fi
