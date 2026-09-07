@@ -1,0 +1,107 @@
+---
+# Reference values for prometheus-community/kube-prometheus-stack.
+# Pin the chart version and image digests in the environment release record.
+crds:
+  enabled: true
+
+alertmanager:
+  enabled: true
+  alertmanagerSpec:
+    replicas: 3
+    retention: 120h
+    useExistingSecret: true
+    configSecret: alertmanager-config
+    automountServiceAccountToken: false
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: REPLACE_ME
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+
+grafana:
+  enabled: true
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
+  ingress:
+    enabled: false
+  service:
+    type: ClusterIP
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: REPLACE_ME
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+  defaultDashboardsEnabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+prometheus:
+  enabled: true
+  ingress:
+    enabled: false
+  service:
+    type: ClusterIP
+  prometheusSpec:
+    replicas: 2
+    retention: 15d
+    retentionSize: 40GiB
+    walCompression: true
+    automountServiceAccountToken: true
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector: {}
+    podMonitorNamespaceSelector: {}
+    ruleSelectorNilUsesHelmValues: false
+    ruleSelector: {}
+    ruleNamespaceSelector: {}
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: REPLACE_ME
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 50Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# K3s embeds these control-plane components and does not expose their metrics
+# through the endpoints expected by this chart without extra configuration.
+kubeControllerManager:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeProxy:
+  enabled: false
