@@ -1,0 +1,58 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: platform-health
+  namespace: observability
+  labels:
+    app.kubernetes.io/part-of: platform-observability
+spec:
+  groups:
+    - name: platform.health
+      rules:
+        - alert: PlatformNodeNotReady
+          expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes node is not ready
+            description: Node {{ $labels.node }} has remained unready for more than 10 minutes.
+
+        - alert: PlatformPodCrashLooping
+          expr: |
+            increase(
+              kube_pod_container_status_restarts_total{
+                namespace=~"apps|data|messaging|observability"
+              }[15m]
+            ) > 3
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Pod is repeatedly restarting
+            description: Pod {{ $labels.namespace }}/{{ $labels.pod }} is restarting repeatedly.
+
+        - alert: PlatformStatefulSetReplicasMismatch
+          expr: |
+            kube_statefulset_status_replicas_ready
+              != kube_statefulset_replicas
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: StatefulSet does not have all replicas ready
+            description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} is below desired capacity.
+
+        - alert: PlatformPersistentVolumeFillingUp
+          expr: |
+            (
+              kubelet_volume_stats_available_bytes
+                / kubelet_volume_stats_capacity_bytes
+            ) < 0.15
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Persistent volume has less than 15 percent free space
+            description: PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} is filling up.
