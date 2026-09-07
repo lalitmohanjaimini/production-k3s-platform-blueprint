@@ -22,14 +22,3 @@ features:
   policyExceptions:
     enabled: true
     namespace: policy-system
-
-config:
-  webhooks:
-    namespaceSelector:
-      matchExpressions:
-        - key: kubernetes.io/metadata.name
-          operator: NotIn
-          values:
-            - kube-system
-            - policy-system
-            - runtime-security
