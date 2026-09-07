@@ -1,0 +1,38 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rabbitmq
+  namespace: observability
+  labels:
+    app.kubernetes.io/part-of: platform-observability
+spec:
+  namespaceSelector:
+    matchNames:
+      - messaging
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: app-rabbitmq
+  endpoints:
+    - port: prometheus
+      interval: 30s
+      scrapeTimeout: 10s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: redis
+  namespace: observability
+  labels:
+    app.kubernetes.io/part-of: platform-observability
+spec:
+  namespaceSelector:
+    matchNames:
+      - data
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis-metrics
+  endpoints:
+    - port: http-metrics
+      interval: 30s
+      scrapeTimeout: 10s
