@@ -34,7 +34,7 @@ else
 fi
 
 echo "Checking required documentation..."
-for file in README.md SECURITY.md docs/architecture.md docs/security.md docs/operations.md; do
+for file in README.md SECURITY.md docs/architecture.md docs/disaster-recovery.md docs/security.md docs/operations.md; do
   test -s "$file" || { echo "Missing or empty: $file" >&2; exit 1; }
 done
 

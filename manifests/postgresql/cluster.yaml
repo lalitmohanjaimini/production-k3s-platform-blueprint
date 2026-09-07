@@ -32,5 +32,11 @@ spec:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
 
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: app-postgres-backup
+
   monitoring:
     enablePodMonitor: true

@@ -1,0 +1,24 @@
+---
+# Configuration-only backup. Stateful data uses service-native backup tooling.
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: platform-config-daily
+  namespace: backup-system
+spec:
+  schedule: "0 2 * * *"
+  useOwnerReferencesInBackup: false
+  template:
+    storageLocation: default
+    includedNamespaces:
+      - apps
+      - platform-system
+      - policy-system
+      - runtime-security
+      - observability
+    excludedResources:
+      - events
+      - events.events.k8s.io
+      - secrets
+    snapshotVolumes: false
+    ttl: 720h0m0s

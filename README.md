@@ -37,7 +37,9 @@ flowchart TB
     A --> Q[RabbitMQ]
     A --> O[Prometheus and Loki]
     F[Falco runtime detection] --> O
+    V[Velero configuration backups] --> B
     P --> O
+    P --> B[(External backup storage)]
     G --> O
     R --> O
     Q --> O
@@ -61,6 +63,7 @@ flowchart TB
 | Admission policy | Kyverno | Audit-first workload configuration guardrails |
 | Runtime security | Falco Operator | Kernel-level runtime detection across Linux nodes |
 | Security access | Kubernetes RBAC | Read-only investigation without Secret access |
+| Recovery | Barman Cloud Plugin and Velero | Database PITR plus Kubernetes configuration recovery |
 
 ## Repository contents
 
@@ -68,12 +71,14 @@ flowchart TB
 .
 ├── docs/
 │   ├── architecture.md
+│   ├── disaster-recovery.md
 │   ├── data-and-messaging.md
 │   ├── observability.md
 │   ├── operations.md
 │   ├── runtime-security.md
 │   └── security.md
 ├── manifests/
+│   ├── backup/
 │   ├── metallb/
 │   ├── mongodb/
 │   ├── network-policies/
@@ -91,7 +96,8 @@ flowchart TB
 
 ## Quick start
 
-1. Read [Architecture](docs/architecture.md), [Data and messaging](docs/data-and-messaging.md),
+1. Read [Architecture](docs/architecture.md), [Disaster recovery](docs/disaster-recovery.md),
+   [Data and messaging](docs/data-and-messaging.md),
    [Observability](docs/observability.md), [Runtime security](docs/runtime-security.md),
    [Security](docs/security.md) and [Operations](docs/operations.md).
 2. Replace every `REPLACE_ME` value and documentation-only address.
@@ -112,8 +118,10 @@ The address range `192.0.2.0/24` used here is reserved for documentation and mus
 
 ## Status
 
-- **Current release — v0.4.0 (Runtime Security):** Falco Operator, Kyverno HA, audit-first policies,
+- **Latest release — v0.4.0 (Runtime Security):** Falco Operator, Kyverno HA, audit-first policies,
   isolated security namespaces and least-privilege audit RBAC
+- **Current development — v0.5.0 (Backup & Disaster Recovery):** PostgreSQL WAL archiving,
+  scheduled base backups, Velero configuration backups and tested restore procedures
 
 ## Author
 

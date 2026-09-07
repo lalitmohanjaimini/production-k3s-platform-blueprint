@@ -1,0 +1,19 @@
+---
+# Helm values for the Velero chart. Supply credentials through the named
+# externally managed Secret; never commit access keys to this repository.
+configuration:
+  backupStorageLocation:
+    - name: default
+      provider: aws
+      bucket: REPLACE_ME
+      config:
+        region: REPLACE_ME
+        s3ForcePathStyle: true
+        s3Url: https://REPLACE_ME
+
+credentials:
+  useSecret: true
+  existingSecret: velero-object-store-credentials
+
+snapshotsEnabled: false
+deployNodeAgent: false

@@ -1,0 +1,24 @@
+---
+# Requires the Barman Cloud Plugin and an externally managed Secret named
+# postgres-backup-object-store. Replace all documentation-only values.
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: app-postgres-backup
+  namespace: data
+spec:
+  configuration:
+    destinationPath: s3://REPLACE_ME/postgresql
+    endpointURL: https://REPLACE_ME
+    s3Credentials:
+      accessKeyId:
+        name: postgres-backup-object-store
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: postgres-backup-object-store
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
+    data:
+      compression: gzip
+  retentionPolicy: "30d"
