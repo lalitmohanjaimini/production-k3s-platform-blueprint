@@ -48,9 +48,9 @@ flowchart TB
 | Load balancing | MetalLB | Stable service addresses on bare-metal or private networks |
 | Ingress | Traefik | HTTP/S routing, TLS termination and middleware |
 | Relational data | CloudNativePG | PostgreSQL high availability and recovery lifecycle |
-| Document data | MongoDB | Document workloads with persistent storage |
-| Cache | Redis | Caching, coordination and ephemeral state |
-| Messaging | RabbitMQ | Durable asynchronous communication |
+| Document data | MongoDB Community Operator | Three-member document database replica set |
+| Cache | Redis replication and Sentinel | Authenticated caching, coordination and failover |
+| Messaging | RabbitMQ Cluster Operator | Durable asynchronous communication and quorum |
 | Observability | Prometheus, Grafana, Loki | Metrics, dashboards, logs and alerts |
 | Runtime security | Falco and Kubernetes policies | Workload visibility and guardrails |
 
@@ -60,12 +60,16 @@ flowchart TB
 .
 ├── docs/
 │   ├── architecture.md
+│   ├── data-and-messaging.md
 │   ├── operations.md
 │   └── security.md
 ├── manifests/
 │   ├── metallb/
+│   ├── mongodb/
 │   ├── network-policies/
 │   ├── postgresql/
+│   ├── rabbitmq/
+│   ├── redis/
 │   └── traefik/
 ├── scripts/
 │   └── validate.sh
@@ -75,9 +79,10 @@ flowchart TB
 
 ## Quick start
 
-1. Read [Architecture](docs/architecture.md), [Security](docs/security.md) and [Operations](docs/operations.md).
+1. Read [Architecture](docs/architecture.md), [Data and messaging](docs/data-and-messaging.md),
+   [Security](docs/security.md) and [Operations](docs/operations.md).
 2. Replace every `REPLACE_ME` value and documentation-only address.
-3. Confirm storage classes, failure domains, DNS, TLS and backup destinations.
+3. Confirm storage classes, failure domains, DNS, TLS, chart versions, image digests and backup destinations.
 4. Validate locally:
 
 ```bash
@@ -94,7 +99,7 @@ The address range `192.0.2.0/24` used here is reserved for documentation and mus
 
 ## Status
 
-**v0.1 foundation:** architecture, networking, ingress, PostgreSQL, security policies, operational guidance and validation.
+**v0.2 data and messaging:** the v0.1 platform foundation plus MongoDB, Redis, RabbitMQ, internal service boundaries and expanded automated validation.
 
 ## Author
 
