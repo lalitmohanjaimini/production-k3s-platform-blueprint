@@ -1,0 +1,35 @@
+# Requires the CloudNativePG operator and an externally managed Secret named
+# postgres-app-credentials with username and password keys.
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: app-postgres
+  namespace: data
+spec:
+  instances: 3
+
+  bootstrap:
+    initdb:
+      database: app
+      owner: app_owner
+      secret:
+        name: postgres-app-credentials
+
+  storage:
+    storageClass: REPLACE_ME
+    size: 20Gi
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+
+  monitoring:
+    enablePodMonitor: true
