@@ -1,0 +1,130 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-privileged-containers
+  annotations:
+    policies.kyverno.io/title: Disallow Privileged Containers
+    policies.kyverno.io/category: Pod Security Standards
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: privileged-containers
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - apps
+                - data
+                - messaging
+                - observability
+      validate:
+        allowExistingViolations: true
+        message: Privileged containers are not allowed in workload namespaces.
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - =(securityContext):
+                  =(privileged): "false"
+            =(initContainers):
+              - =(securityContext):
+                  =(privileged): "false"
+            containers:
+              - =(securityContext):
+                  =(privileged): "false"
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-mutable-image-tags
+  annotations:
+    policies.kyverno.io/title: Disallow Mutable Image Tags
+    policies.kyverno.io/category: Supply Chain Security
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: require-image-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - apps
+                - data
+                - messaging
+                - observability
+      validate:
+        allowExistingViolations: true
+        message: Every workload image must use an explicit immutable tag.
+        foreach:
+          - list: request.object.spec.containers
+            pattern:
+              image: "*:*"
+          - list: request.object.spec.initContainers
+            pattern:
+              image: "*:*"
+    - name: reject-latest-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - apps
+                - data
+                - messaging
+                - observability
+      validate:
+        allowExistingViolations: true
+        message: The mutable latest image tag is not allowed.
+        foreach:
+          - list: request.object.spec.containers
+            pattern:
+              image: "!*:latest"
+          - list: request.object.spec.initContainers
+            pattern:
+              image: "!*:latest"
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-application-resources
+  annotations:
+    policies.kyverno.io/title: Require Application Resource Boundaries
+    policies.kyverno.io/category: Reliability
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: require-requests-and-limits
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - apps
+      validate:
+        allowExistingViolations: true
+        message: Application containers require CPU and memory requests and limits.
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  requests:
+                    cpu: "?*"
+                    memory: "?*"
+                  limits:
+                    cpu: "?*"
+                    memory: "?*"
