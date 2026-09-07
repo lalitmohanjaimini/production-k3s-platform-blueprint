@@ -104,7 +104,7 @@ The address range `192.0.2.0/24` used here is reserved for documentation and mus
 
 ## Status
 
-**v0.3 observability:** the v0.2 data and messaging platform plus Prometheus, Grafana, Alertmanager, Loki, Grafana Alloy, platform alerts and metrics discovery.
+**Current release — v0.3.0 (Observability):** the v0.2 data and messaging platform plus Prometheus, Grafana, Alertmanager, Loki, Grafana Alloy, platform alerts and metrics discovery.
 
 ## Author
 
