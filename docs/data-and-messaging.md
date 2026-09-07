@@ -54,3 +54,18 @@ cluster traffic, allows application access only to MongoDB, Redis and AMQP clien
 
 These policies require a network-policy-capable CNI. Validate selectors and operator-created pod traffic in a
 non-production cluster before enforcement.
+
+## Recovery boundaries
+
+The three services do not share one safe backup mechanism:
+
+- MongoDB replica-set dumps use `mongodump --oplog` when logical backup is
+  appropriate; restore validation uses `mongorestore --oplogReplay` in a
+  separate recovery deployment.
+- Redis persistence protects restartability, not off-cluster recovery. Decide
+  explicitly whether the workload is a rebuildable cache or durable data.
+- RabbitMQ definition exports preserve topology but not queued messages. Message
+  recovery requires a documented cold-backup or blue-green strategy.
+
+See [Service recovery procedures](service-recovery.md) for detailed gates,
+commands and acceptance evidence.

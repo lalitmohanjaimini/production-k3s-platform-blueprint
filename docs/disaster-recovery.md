@@ -42,6 +42,8 @@ credentials must be recreated from the external secret system.
 Before relying on this schedule, verify that every required custom resource definition,
 cluster-scoped dependency and externally managed Secret can be recreated.
 
+For MongoDB, Redis and RabbitMQ procedures, see [Service recovery](service-recovery.md).
+
 ## Restore drill
 
 Run at least quarterly and after material storage, operator or schema changes.

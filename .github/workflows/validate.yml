@@ -34,6 +34,7 @@ jobs:
             /work/manifests/mongodb/community-replica-set.yaml \
             /work/manifests/network-policies/data-and-messaging.yaml \
             /work/manifests/network-policies/default-deny-apps.yaml \
+            /work/manifests/observability/backup-alerts.yaml \
             /work/manifests/observability/platform-alerts.yaml \
             /work/manifests/observability/service-monitors.yaml \
             /work/manifests/postgresql/cluster.yaml \

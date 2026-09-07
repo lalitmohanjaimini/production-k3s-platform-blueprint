@@ -76,6 +76,7 @@ flowchart TB
 │   ├── observability.md
 │   ├── operations.md
 │   ├── runtime-security.md
+│   ├── service-recovery.md
 │   └── security.md
 ├── manifests/
 │   ├── backup/
@@ -121,7 +122,8 @@ The address range `192.0.2.0/24` used here is reserved for documentation and mus
 - **Latest release — v0.4.0 (Runtime Security):** Falco Operator, Kyverno HA, audit-first policies,
   isolated security namespaces and least-privilege audit RBAC
 - **Current development — v0.5.0 (Backup & Disaster Recovery):** PostgreSQL WAL archiving,
-  scheduled base backups, Velero configuration backups and tested restore procedures
+  scheduled base backups, Velero configuration backups, service-specific recovery runbooks
+  and backup-health alerts
 
 ## Author
 

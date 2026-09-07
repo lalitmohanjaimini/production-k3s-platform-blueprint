@@ -1,0 +1,54 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: backup-health
+  namespace: observability
+  labels:
+    app.kubernetes.io/part-of: platform-observability
+spec:
+  groups:
+    - name: platform.backup
+      rules:
+        - alert: PostgreSQLBackupStale
+          expr: |
+            time()
+              - max(
+                  barman_cloud_cloudnative_pg_io_last_available_backup_timestamp{
+                    namespace="data"
+                  }
+                ) > 93600
+          for: 30m
+          labels:
+            severity: critical
+          annotations:
+            summary: PostgreSQL backup recovery point is stale
+            description: No available Barman Cloud base backup is newer than 26 hours.
+
+        - alert: PostgreSQLBackupFailed
+          expr: |
+            max(
+              barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp{
+                namespace="data"
+              }
+            )
+              > max(
+                  barman_cloud_cloudnative_pg_io_last_available_backup_timestamp{
+                    namespace="data"
+                  }
+                )
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Latest PostgreSQL backup attempt failed
+            description: The latest Barman Cloud backup timestamp is a failure.
+
+        - alert: VeleroBackupFailure
+          expr: increase(velero_backup_failure_total[1h]) > 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: Velero backup failed
+            description: Velero reported one or more failed backups in the last hour.
