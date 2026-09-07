@@ -1,5 +1,7 @@
 # Production K3s Platform Blueprint
 
+[![Validate blueprint](https://github.com/lalitmohanjaimini/production-k3s-platform-blueprint/actions/workflows/validate.yml/badge.svg)](https://github.com/lalitmohanjaimini/production-k3s-platform-blueprint/actions/workflows/validate.yml)
+
 A production-minded reference architecture for running application workloads on a compact K3s cluster with clear networking, data, messaging, observability and security boundaries.
 
 > Public and vendor-neutral by design. Every address, domain, secret name and environment value is an example.
