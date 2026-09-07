@@ -7,12 +7,12 @@ cd "$repo_root"
 echo "Checking for sensitive material..."
 sensitive_pattern='BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|password:[[:space:]]+[^R]|token:[[:space:]]+[^R]|kubeconfig:'
 if command -v rg >/dev/null 2>&1; then
-  if rg -n --hidden -g '!.git/**' "$sensitive_pattern" .; then
+  if rg -n --hidden -g '!.git/**' -g '!scripts/validate.sh' "$sensitive_pattern" .; then
     echo "Potential sensitive value found. Review before publishing." >&2
     exit 1
   fi
 else
-  if grep -RInE --exclude-dir=.git "$sensitive_pattern" .; then
+  if grep -RInE --exclude-dir=.git --exclude=validate.sh "$sensitive_pattern" .; then
     echo "Potential sensitive value found. Review before publishing." >&2
     exit 1
   fi
