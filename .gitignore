@@ -1,0 +1,14 @@
+# Local Kubernetes and secret material
+*.kubeconfig
+*.key
+*.pem
+*.p12
+*.env
+.env.*
+
+# Generated and local tooling
+.DS_Store
+.idea/
+.vscode/
+tmp/
+dist/
