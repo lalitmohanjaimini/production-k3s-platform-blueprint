@@ -112,8 +112,7 @@ The address range `192.0.2.0/24` used here is reserved for documentation and mus
 
 ## Status
 
-- **Latest release — v0.3.0:** observability milestone
-- **Current development — v0.4 runtime security:** Falco Operator, Kyverno HA, audit-first policies,
+- **Current release — v0.4.0 (Runtime Security):** Falco Operator, Kyverno HA, audit-first policies,
   isolated security namespaces and least-privilege audit RBAC
 
 ## Author
