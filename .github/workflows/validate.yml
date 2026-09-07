@@ -30,5 +30,8 @@ jobs:
             -ignore-missing-schemas \
             /work/manifests/00-namespaces.yaml \
             /work/manifests/metallb/l2-address-pool.yaml \
+            /work/manifests/mongodb/community-replica-set.yaml \
+            /work/manifests/network-policies/data-and-messaging.yaml \
             /work/manifests/network-policies/default-deny-apps.yaml \
-            /work/manifests/postgresql/cluster.yaml
+            /work/manifests/postgresql/cluster.yaml \
+            /work/manifests/rabbitmq/cluster.yaml
