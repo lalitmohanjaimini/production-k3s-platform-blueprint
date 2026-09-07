@@ -1,0 +1,67 @@
+---
+# Reference values for the Bitnami Redis Helm chart.
+# Pin a tested chart version and immutable image digest in the environment release record.
+architecture: replication
+
+auth:
+  enabled: true
+  sentinel: true
+  existingSecret: redis-auth
+  existingSecretPasswordKey: redis-password
+  usePasswordFiles: true
+  usePasswordFileFromSecret: true
+
+commonConfiguration: |-
+  appendonly yes
+  appendfsync everysec
+  save ""
+
+master:
+  persistence:
+    enabled: true
+    storageClass: REPLACE_ME
+    size: 8Gi
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  podAntiAffinityPreset: soft
+  automountServiceAccountToken: false
+
+replica:
+  replicaCount: 3
+  persistence:
+    enabled: true
+    storageClass: REPLACE_ME
+    size: 8Gi
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  podAntiAffinityPreset: hard
+  automountServiceAccountToken: false
+
+sentinel:
+  enabled: true
+  quorum: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+service:
+  type: ClusterIP
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
