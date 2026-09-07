@@ -33,11 +33,12 @@ flowchart TB
     A --> G[(MongoDB)]
     A --> R[(Redis)]
     A --> Q[RabbitMQ]
-    A --> O[Metrics and logs]
+    A --> O[Prometheus and Loki]
     P --> O
     G --> O
     R --> O
     Q --> O
+    O --> D[Grafana and Alertmanager]
 ```
 
 ## Platform layers
@@ -51,7 +52,9 @@ flowchart TB
 | Document data | MongoDB Community Operator | Three-member document database replica set |
 | Cache | Redis replication and Sentinel | Authenticated caching, coordination and failover |
 | Messaging | RabbitMQ Cluster Operator | Durable asynchronous communication and quorum |
-| Observability | Prometheus, Grafana, Loki | Metrics, dashboards, logs and alerts |
+| Metrics | Prometheus Operator and Alertmanager | Collection, recording, alerts and notification routing |
+| Logs | Loki HA monolithic and Grafana Alloy | Durable log storage, collection and querying |
+| Visualization | Grafana | Dashboards and operational investigation |
 | Runtime security | Falco and Kubernetes policies | Workload visibility and guardrails |
 
 ## Repository contents
@@ -61,12 +64,14 @@ flowchart TB
 ├── docs/
 │   ├── architecture.md
 │   ├── data-and-messaging.md
+│   ├── observability.md
 │   ├── operations.md
 │   └── security.md
 ├── manifests/
 │   ├── metallb/
 │   ├── mongodb/
 │   ├── network-policies/
+│   ├── observability/
 │   ├── postgresql/
 │   ├── rabbitmq/
 │   ├── redis/
@@ -80,7 +85,7 @@ flowchart TB
 ## Quick start
 
 1. Read [Architecture](docs/architecture.md), [Data and messaging](docs/data-and-messaging.md),
-   [Security](docs/security.md) and [Operations](docs/operations.md).
+   [Observability](docs/observability.md), [Security](docs/security.md) and [Operations](docs/operations.md).
 2. Replace every `REPLACE_ME` value and documentation-only address.
 3. Confirm storage classes, failure domains, DNS, TLS, chart versions, image digests and backup destinations.
 4. Validate locally:
@@ -99,7 +104,7 @@ The address range `192.0.2.0/24` used here is reserved for documentation and mus
 
 ## Status
 
-**v0.2 data and messaging:** the v0.1 platform foundation plus MongoDB, Redis, RabbitMQ, internal service boundaries and expanded automated validation.
+**v0.3 observability:** the v0.2 data and messaging platform plus Prometheus, Grafana, Alertmanager, Loki, Grafana Alloy, platform alerts and metrics discovery.
 
 ## Author
 
