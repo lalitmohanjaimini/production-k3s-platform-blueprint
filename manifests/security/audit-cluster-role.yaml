@@ -1,0 +1,61 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: platform-security-auditor
+  labels:
+    app.kubernetes.io/part-of: platform-security
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - events
+      - namespaces
+      - nodes
+      - pods
+      - pods/log
+      - serviceaccounts
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - daemonsets
+      - deployments
+      - replicasets
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - networkpolicies
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - kyverno.io
+    resources:
+      - clusterpolicies
+      - policies
+      - policyexceptions
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - wgpolicyk8s.io
+    resources:
+      - clusterpolicyreports
+      - policyreports
+    verbs:
+      - get
+      - list
+      - watch
