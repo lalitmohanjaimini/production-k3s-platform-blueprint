@@ -1,0 +1,35 @@
+---
+# Reference values for the official Kyverno Helm chart.
+# Pin a tested chart version and image digests in the environment release record.
+namespaceOverride: policy-system
+
+admissionController:
+  replicas: 3
+
+backgroundController:
+  enabled: true
+  replicas: 2
+
+cleanupController:
+  enabled: true
+  replicas: 2
+
+reportsController:
+  enabled: true
+  replicas: 2
+
+features:
+  policyExceptions:
+    enabled: true
+    namespace: policy-system
+
+config:
+  webhooks:
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values:
+            - kube-system
+            - policy-system
+            - runtime-security
