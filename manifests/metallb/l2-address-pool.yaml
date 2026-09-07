@@ -1,0 +1,20 @@
+# 192.0.2.0/24 is reserved for documentation.
+# Replace this range with reserved, non-DHCP addresses from the target network.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: example-pool
+  namespace: metallb-system
+spec:
+  autoAssign: true
+  addresses:
+    - 192.0.2.200-192.0.2.220
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: example-l2
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - example-pool
