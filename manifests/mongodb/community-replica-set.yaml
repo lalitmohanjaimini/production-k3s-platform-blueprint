@@ -1,0 +1,42 @@
+---
+# Requires the MongoDB Community Kubernetes Operator.
+# The referenced password Secret must be created by an external secret workflow.
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: app-mongodb
+  namespace: data
+  labels:
+    app.kubernetes.io/name: app-mongodb
+    app.kubernetes.io/component: document-database
+spec:
+  members: 3
+  type: ReplicaSet
+  version: REPLACE_ME_WITH_TESTED_8_0_PATCH
+  security:
+    authentication:
+      modes:
+        - SCRAM
+  users:
+    - name: app-user
+      db: app
+      passwordSecretRef:
+        name: mongodb-app-user-password
+      roles:
+        - name: readWrite
+          db: app
+      scramCredentialsSecretName: mongodb-app-user-scram
+  statefulSet:
+    spec:
+      volumeClaimTemplates:
+        - metadata:
+            name: data-volume
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            storageClassName: REPLACE_ME
+            resources:
+              requests:
+                storage: 20Gi
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zstd
