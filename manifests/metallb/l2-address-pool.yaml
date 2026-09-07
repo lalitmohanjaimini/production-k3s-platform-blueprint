@@ -1,3 +1,4 @@
+---
 # 192.0.2.0/24 is reserved for documentation.
 # Replace this range with reserved, non-DHCP addresses from the target network.
 apiVersion: metallb.io/v1beta1
